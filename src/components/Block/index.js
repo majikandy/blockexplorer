@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import Moment from 'react-moment';
 
 
 class Block extends Component {
@@ -42,7 +43,9 @@ class Block extends Component {
             </tr>
             <tr>
               <td>Timestamp</td>
-              <td>{this.state.block.blockTime}</td>
+              <td>
+                
+            <Moment unix>{this.state.block.blockTime}</Moment></td>
             </tr>
             <tr>
               <td>Blockhash</td>
