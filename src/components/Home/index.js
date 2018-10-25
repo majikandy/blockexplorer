@@ -18,15 +18,19 @@ class Home extends Component {
             .then(latestBlock=>this.setState({latestBlock}))
             .then(_ => {
                 for (let index = 0; index < 50; index++) {
+                    var currentTime = new Date().getTime();
+                    while (currentTime + 1 >= new Date().getTime()) {
+                        //stupid 1ms delay to help enforce order
+                    }
                     let blockNum = this.state.latestBlock.blockIndex - index;
                     let url = `http://localhost:9000/api/query/block/Index/${blockNum}/transactions`;
-                    console.log(url);
                     fetch(url ,{mode: 'cors'})
                     .then(result=>result.json())
                     .then(block=>this.setState({blocks: this.state.blocks.concat(block)}));
                     
                 }
             });
+            //.then(_ => this.state.blocks.sort((b, a) => a.blockIndex > b.blockIndex));
     }
     
     render() {
@@ -53,7 +57,8 @@ class Home extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.blocks.map(function(object, i){
+                            {this.state.blocks
+                            .map(function(object, i){
                                 return <tr>
                                     <td><Link to={"/block/" +  object.blockIndex }> {object.blockIndex}</Link></td>
                                     {/* <td>{object.transactionCount}</td> */}
