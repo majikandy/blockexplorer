@@ -28,6 +28,9 @@ class Block extends Component {
   render() {
     return (
       <div className="Block">
+        <div className="App-header">
+          <h1>{this.state.block.coinTag} Block explorer</h1>
+        </div>
         <h2>Block Info: {this.state.block.blockIndex}</h2>
         <table>
           <thead>

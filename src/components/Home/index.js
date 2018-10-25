@@ -19,7 +19,9 @@ class Home extends Component {
     render() {
         return (
             <div className="Home">
-                <h2>Home page</h2>
+                    <div className="App-header">
+                        <h1>{this.state.latestBlock.coinTag} Block explorer</h1>
+                    </div>
                 
                     <div>
                         Current height: <Link to={"/block/" +  this.state.latestBlock.blockIndex }> {this.state.latestBlock.blockIndex}</Link>

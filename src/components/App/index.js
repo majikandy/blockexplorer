@@ -11,10 +11,6 @@ class App extends Component {
     return (
       <Router>
       <div className="App">
-        <div className="App-header">
-         
-          <h2>Block Explorer</h2>
-        </div>
         <div className="App-nav">
         
             <div>

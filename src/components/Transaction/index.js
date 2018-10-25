@@ -23,6 +23,9 @@ class Transaction extends Component {
   render() {
     return (
       <div className="Block">
+        <div className="App-header">
+          <h1>{this.state.transaction.coinTag} Block explorer</h1>
+        </div>
         <h2>Transaction Id: {this.state.transaction.transactionId}</h2>
         {/* <div>{JSON.stringify(this.state.transaction)}</div> */}
         <table>
