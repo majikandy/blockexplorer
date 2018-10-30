@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-
+import { Table } from 'react-bootstrap';
 import { Grid } from 'react-bootstrap';
 
 class Transaction extends Component {
@@ -30,7 +30,7 @@ class Transaction extends Component {
           </div>
           <h2>Transaction Id: {this.state.transaction.transactionId}</h2>
           {/* <div>{JSON.stringify(this.state.transaction)}</div> */}
-          <table>
+          <Table>
             <thead>
               <tr>
                 <th></th>
@@ -66,7 +66,7 @@ class Transaction extends Component {
               </tr>
             </tbody>
           
-          </table>
+          </Table>
         </div>
       </Grid>
     );

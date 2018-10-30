@@ -30,7 +30,6 @@ class Home extends Component {
                     
                 }
             });
-            //.then(_ => this.state.blocks.sort((b, a) => a.blockIndex > b.blockIndex));
     }
     
     render() {
