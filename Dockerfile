@@ -1,20 +1,15 @@
-FROM node:10.3.0
+FROM node:10.3.0 as build-dependencies
 
-# install git and nano
-RUN apt-get update && apt-get install -y nano git npm \
-    && echo -e "\nexport TERM=xterm" >> ~/.bashrc
+WORKDIR /usr/src/app
+COPY package.json yarn.lock ./
+RUN yarn
+COPY . ./
+RUN yarn build
 
-RUN mkdir -p /usr/src/app/source /usr/src/app/build
-
-# clone the repository and build
-RUN git clone https://github.com/majikandy/blockexplorer.git /usr/src/app/source
-WORKDIR /usr/src/app/source
-RUN npm install
-
-# remove git and the sourc
-RUN apt-get purge -y --auto-remove git
-
-EXPOSE 3000
-
-ENTRYPOINT [ "yarn",  "start" ]
+FROM nginx:1.14
+RUN rm -rf /etc/nginx/conf.d
+COPY conf /etc/nginx
+COPY --from=build-dependencies /usr/src/app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 
