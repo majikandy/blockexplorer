@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './style.css';
 import Block from './../Block';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import { Grid, Row, Col, Table } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
+//import { Grid, Row, Col, Table } from 'react-bootstrap'
 import Moment from 'react-moment';
 
 class Home extends Component {
@@ -47,7 +48,7 @@ class Home extends Component {
 
                             
                         </div>
-                        <table class="table table-bordered table-striped">
+                        <table className="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <td>Height</td>
@@ -58,7 +59,7 @@ class Home extends Component {
                         <tbody>
                             {this.state.blocks
                             .map(function(object, i){
-                                return <tr>
+                                return <tr key={i}>
                                     <td><Link to={"/block/" +  object.blockIndex }> {object.blockIndex}</Link></td>
                                     {/* <td>{object.transactionCount}</td> */}
                                     <td><Moment fromNow ago unix>{object.blockTime}</Moment></td>

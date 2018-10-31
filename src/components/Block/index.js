@@ -2,22 +2,30 @@ import React, { Component } from 'react';
 import './style.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Moment from 'react-moment';
-import { Grid, Table, Row, Col } from 'react-bootstrap';
+import { Grid } from 'react-bootstrap';
+//import { Grid, Table, Row, Col } from 'react-bootstrap';
 
 
 class Block extends Component {
+  xxx = true;
+
   constructor(props) {
     super(props);
 
     this.state = {
       block: { transactions : []},
+      nextBlock: { transactions : []},
       transactions: []
     };
   }
 
   componentDidMount() {
+    
     let blockIndex = this.props.match.params.blockIndex;
    
+   
+    
+
     fetch(`http://localhost:9000/api/query/block/Index/${blockIndex}/transactions`,{mode: 'cors'})
             .then(result=>result.json())
             .then(block=>this.setState({block}))
@@ -26,14 +34,25 @@ class Block extends Component {
                             const transactionId = this.state.block.transactions[i];
                             fetch(`http://localhost:9000/api/query/transaction/${transactionId}`,{mode: 'cors'})
                             .then(result=>result.json())
-                            .then(transaction=>this.setState({transactions: this.state.transactions.concat(transaction)}));
+                            .then(transaction=>{
+                                this.setState({transactions: this.state.transactions.concat(transaction)})
+                                this.setState({confirmations: transaction.confirmations})
+                                this.setState({latestHeight: parseInt(blockIndex) + transaction.confirmations})
+                            });
                         }
               
             });
+    let nextIndex = parseInt(blockIndex) + 1;
+
+    console.log(nextIndex);
+    fetch(`http://localhost:9000/api/query/block/Index/${nextIndex}`,{mode: 'cors'})
+            .then(result=>result.json())
+            .then(nextBlock=>{this.setState({nextBlock})});
   }
 
   componentWillReceiveProps(nextProps) {
     this.props = nextProps;
+    
   }
   
   render() {
@@ -47,7 +66,7 @@ class Block extends Component {
           
 
           <h2>Block Info: {this.state.block.blockIndex}</h2>
-          <table class="table table-striped">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th></th>
@@ -57,7 +76,7 @@ class Block extends Component {
             <tbody>
               <tr>
                 <td>Block height</td>
-                <td>{this.state.block.blockIndex}</td>
+                <td>{this.state.block.blockIndex} of <a href={"/block/" + this.state.latestHeight}>{this.state.latestHeight}</a></td>
               </tr>
               <tr>
                 <td>Timestamp</td>
@@ -84,12 +103,12 @@ class Block extends Component {
               </tr>
               <tr>
                 <td>Next Blockhash</td>
-                <td><a href={"/block/" +  (this.state.block.blockIndex+1) }>nextBlockHash</a></td>
+    <td>{this.state.nextBlock.blockHash  && <a href={"/block/" +  (this.state.block.blockIndex+1) }>{this.state.nextBlock.blockHash}</a>}</td>
                 {/* <Link to={"/block/" +  (this.state.block.blockIndex+1) }>nextBlockHashWithLink</Link> */}
               </tr>
               <tr>
                 <td>Transactions</td>
-                <td><ul>{this.state.block.transactions.map((transactionHash, index) => <li>
+                <td><ul>{this.state.block.transactions.map((transactionHash, index) => <li key={index}>
                   <Link to={"/transaction/" +  transactionHash }>{transactionHash}</Link>}
                   </li>)}</ul></td>
                 {/* <td><Link to={"/block/" +  (this.state.block.blockIndex-1) }>{this.state.block.nextBlockHash}</Link></td> */}
@@ -100,10 +119,10 @@ class Block extends Component {
 
           <br/>
 
-          <table class="table table-striped">
+          <table className="table table-striped">
             <thead>
               <tr>
-                <th></th>
+                <th>Transactions</th>
                 <th></th> 
                 <th></th>
               </tr>
@@ -112,12 +131,12 @@ class Block extends Component {
               
             {this.state.transactions
               .map(function(object, i){
-                  return <tr>
+                  return <tr key={i}>
                       <td>{object.transactionId }</td>
                       <td></td>
                       <td>
                         {object.inputs.map(function(input, j){
-                          return <span>{input.inputIndex }x {input.inputAddress}y  {input.coinBase} z {input.inputTransactionId}</span>
+                          return <span key={j}>{input.inputIndex }x {input.inputAddress}y  {input.coinBase} z {input.inputTransactionId}</span>
                           
                       }) }
                       </td>

@@ -18,7 +18,7 @@ class Transaction extends Component {
    
     fetch(`http://localhost:9000/api/query/transaction/${transactionId}`,{mode: 'cors'})
             .then(result=>result.json())
-            .then(transaction=>this.setState({transaction}));
+            .then(transaction=> this.setState({transaction}));
   }
   
   render() {
@@ -29,7 +29,7 @@ class Transaction extends Component {
             <h1>{this.state.transaction.coinTag} Block explorer</h1>
           </div>
           <h2>Transaction Id: {this.state.transaction.transactionId}</h2>
-          {/* <div>{JSON.stringify(this.state.transaction)}</div> */}
+         
           <Table>
             <thead>
               <tr>
